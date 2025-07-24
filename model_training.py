@@ -25,14 +25,14 @@ y=to_categorical(labels).astype(int)
 x_train,x_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=0)
 log_dir=os.path.join("Logs")
 tb_callback=TensorBoard(log_dir=log_dir)
-#
-# try:
-#     model.fit(x_train, y_train, epochs=6000,batch_size=256,verbose=2, callbacks=tb_callback)
-# except KeyboardInterrupt:
-#     print("\nTraining interrupted. Saving model...")
-#
-#
-# save_model(model, "model5.keras")
-# print("Model saved to model5.keras")
+
+try:
+    model.fit(x_train, y_train, epochs=6000,batch_size=256,verbose=2, callbacks=tb_callback)
+except KeyboardInterrupt:
+    print("\nTraining interrupted. Saving model...")
+
+
+save_model(model, "models/model6.keras")
+print("Model saved to model6.keras")
 
 

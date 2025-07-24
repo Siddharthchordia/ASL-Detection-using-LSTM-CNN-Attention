@@ -72,37 +72,6 @@ def create_bins():
             os.makedirs(dir_path, exist_ok=True)
             print(f"Created: {dir_path}")
 
-#
-# def data_collection():
-#     cap = cv2.VideoCapture(0)
-#     with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
-#         for action in actions:
-#             cv2.putText(image, f'WORD CHANGE TO {action}', (120, 200), cv2.FONT_HERSHEY_SIMPLEX, 4, (0, 255, 0), 10,
-#                         cv2.LINE_AA)
-#             cv2.waitKey(5000)
-#             for sequence in range(no_sequences):
-#                 for frame_num in range(seq_length):
-#                     ret, frame = cap.read()
-#                     frame = cv2.flip(frame, 1)
-#                     image, results = mediapipe_detection(frame, holistic)
-#                     print(results)
-#                     draw_landmark(image,results)
-#                     if frame_num == 0:
-#                         cv2.putText(image,'STARTING COLLECTION', (120, 200),cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 255, 0), 10,cv2.LINE_AA)
-#                         cv2.waitKey(2000)
-#
-#                     cv2.putText(image,'Collecting frames for {} Video Number {}'.format(action, sequence), (30, 50),cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 6, cv2.LINE_AA)
-#                     keypoints = extract_keypoints (results)
-#                     npy_path = os.path.join(DATA_PATH, action, str(sequence), str(frame_num))
-#                     np.save(npy_path, keypoints)
-#                     cv2.imshow("OpenCV Feed", image)
-#                     if cv2.waitKey(10) & 0xFF == ord('q'):
-#                         break
-#     cap.release()
-#     cv2.destroyAllWindows()
-#     plt.imshow(frame)
-
-
 def data_collection2():
     cap = cv2.VideoCapture(1)
     if not cap.isOpened():
@@ -159,21 +128,9 @@ def data_collection2():
                         return
     cap.release()
     cv2.destroyAllWindows()
-sequences,labels=[],[]
 
-def sequencing():
-    for action in actions:
-        for sequence in range(no_sequences):
-            video=[]
-            for frame_num in range(seq_length):
-                res=np.load(os.path.join(DATA_PATH,action,str(sequence),f"{frame_num}.npy"))
-                video.append(res)
-            sequences.append(video)
-            labels.append(label_map[action])
-    print(np.array(sequences).shape)
-    print(np.array(labels).shape)
 
-def build_hybrid_model(input_shape=(60, 258), num_classes=4):  # Update num_classes if needed
+def build_hybrid_model(input_shape=(60, 258), num_classes=4):
     inputs = Input(shape=input_shape)
     x = Conv1D(256, kernel_size=3, activation='relu', padding='same')(inputs)
     x = BatchNormalization()(x)
@@ -194,17 +151,6 @@ def build_hybrid_model(input_shape=(60, 258), num_classes=4):  # Update num_clas
     model = Model(inputs, outputs)
     return model
 model = build_hybrid_model((60,258),actions.shape[0])
-# model=Sequential()
-# model.add(Input((30,1662)))
-# model.add(LSTM(64,return_sequences=True,activation='relu'))
-# model.add(LSTM(128,return_sequences=True,activation='relu'))
-# model.add(LSTM(256,return_sequences=True,activation='relu'))
-# model.add(LSTM(128,return_sequences=True,activation='relu'))
-# model.add(LSTM(64,return_sequences=False,activation='relu'))
-# model.add(Dense(64,activation='relu'))
-# model.add(Dense(32,activation='relu'))
-# model.add(Dense(actions.shape[0],activation='softmax'))
-#
 model.compile(optimizer="Adam",loss="categorical_crossentropy",metrics=['categorical_accuracy'])
 
 

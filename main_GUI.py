@@ -33,7 +33,7 @@ class SignLanguageApp(QWidget):
         self.holistic = mp.solutions.holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
         # model.compile(optimizer="Adam", loss="categorical_crossentropy", metrics=['categorical_accuracy'])
-        model.load_weights("models/model3.keras")
+        model.load_weights("models/model6.keras")
 
         self.init_ui()
         self.update_stylesheet()

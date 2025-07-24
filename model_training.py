@@ -4,6 +4,21 @@ from keras._tf_keras.keras.saving import save_model
 
 # create_bins()
 # data_collection2()
+DATA_PATH = "data2_augmented"
+sequences,labels=[],[]
+no_aug_seq = 400
+
+def sequencing():
+    for action in actions:
+        for sequence in range(no_aug_seq):
+            video=[]
+            for frame_num in range(seq_length):
+                res=np.load(os.path.join(DATA_PATH,action,str(sequence),f"{frame_num}.npy"))
+                video.append(res)
+            sequences.append(video)
+            labels.append(label_map[action])
+    print(np.array(sequences).shape)
+    print(np.array(labels).shape)
 sequencing()
 X=np.array(sequences)
 y=to_categorical(labels).astype(int)
